@@ -13,7 +13,6 @@ import Profile from "./pages/Profile";
 
 const App = () => {
   return (
-    <div>
       <BrowserRouter>
         <Toaster position='top-right' />
         <Routes>
@@ -26,7 +25,6 @@ const App = () => {
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
-    </div>
   )
 }
 
