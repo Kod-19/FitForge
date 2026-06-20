@@ -119,7 +119,7 @@ export default function WorkoutBuilder() {
               value={ex.name}
               onChange={(e) => updateExercise(i, "name", e.target.value)}
               placeholder="Exercise name"
-              className="flex-1 min-w-[140px] px-3 py-2 rounded-lg bg-slate-800 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+              className="flex-1 min-w-35 px-3 py-2 rounded-lg bg-slate-800 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-orange-500 text-sm"
             />
             <input
               type="number"
