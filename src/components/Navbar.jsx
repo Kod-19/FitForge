@@ -29,7 +29,7 @@ export default function Navbar() {
   return (
     <nav className="bg-slate-900 border-b border-slate-800 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto flex items-center justify-between h-16">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => {navigate("/")}}>
           <Dumbbell className="text-orange-500" size={22} />
           <span className="text-white font-bold">FitForge</span>
         </div>

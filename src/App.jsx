@@ -17,8 +17,10 @@ import AddExercise from "./pages/AddExercise";
 function Layout({ children }) {
   return (
     <ProtectedRoute>
-      <Navbar />
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6">{children}</main>
+      <div className="min-h-screen bg-[#020817]">
+        <Navbar />
+        <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6">{children}</main>
+      </div>
     </ProtectedRoute>
   );
 }

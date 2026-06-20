@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FitForge">
+  <rect width="64" height="64" rx="14" fill="#020817"/>
+  <path d="M14 38h6V26h-6v12Zm30 0h6V26h-6v12ZM24 35h16v-6H24v6Zm-2 7h4V22h-4v20Zm16 0h4V22h-4v20Z" fill="#f97316"/>
+  <path d="M14 26h6v12h-6V26Zm30 0h6v12h-6V26Z" fill="#fb923c"/>
+</svg>

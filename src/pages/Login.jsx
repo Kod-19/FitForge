@@ -91,7 +91,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 transition text-white font-medium disabled:opacity-50"
+            className="cursor-pointer w-full py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 transition text-white font-medium disabled:opacity-50"
           >
             {submitting ? "Please wait..." : isSignUp ? "Sign Up" : "Log In"}
           </button>
@@ -106,7 +106,7 @@ export default function Login() {
         <button
           onClick={handleGoogleLogin}
           disabled={submitting}
-          className="w-full py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 transition text-white font-medium disabled:opacity-50"
+          className="cursor-pointer w-full py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 transition text-white font-medium disabled:opacity-50"
         >
           Continue with Google
         </button>
@@ -115,7 +115,7 @@ export default function Login() {
           {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
           <button
             onClick={() => setIsSignUp(!isSignUp)}
-            className="text-orange-500 hover:underline"
+            className="cursor-pointer text-orange-500 hover:underline"
           >
             {isSignUp ? "Log in" : "Sign up"}
           </button>

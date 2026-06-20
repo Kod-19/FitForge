@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { Search, Play, X } from "lucide-react";
+import { Search, Play, X, Info } from "lucide-react";
 import { db } from "../firebase/firebase";
 
 const MUSCLE_GROUPS = ["All", "Chest", "Back", "Legs", "Shoulders", "Arms", "Core"];
@@ -32,6 +32,11 @@ export default function ExerciseLibrary() {
       <div>
         <h1 className="text-2xl font-bold text-white">Exercise Library</h1>
         <p className="text-slate-400 text-sm mt-1">Browse movements with video demos.</p>
+      </div>
+
+      <div className="flex items-start gap-3 rounded-lg border border-orange-500/20 bg-orange-500/10 px-4 py-3 text-sm text-orange-100">
+        <Info className="mt-0.5 shrink-0 text-orange-400" size={16} />
+        <p>Exercise illustrations are coming soon.</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3">
