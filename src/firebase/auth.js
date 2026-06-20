@@ -10,7 +10,7 @@ import { auth, googleProvider, db } from "./firebase";
 
 //Register with email and password
 export const registerUser = async (email, password, displayName) => {
-    const userCredentials = await createUserWithEmailAndPassword(email, password, auth);
+    const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredentials.user;
 
     //set display name on the Auth profile
@@ -30,7 +30,7 @@ export const registerUser = async (email, password, displayName) => {
 }
 
 //sign in with email and password
-export  const loginUser = (email, password) => {
+export const loginUser = async (email, password) => {
     const userCredentials = await signInWithEmailAndPassword(auth, email, password);
     return userCredentials.user;
 }
@@ -55,6 +55,11 @@ export const loginWithGoogle = async () => {
 }
 
 //log out
-export const logoutUser = () => {
+export const logoutUser = async () => {
     await signOut(auth);
 }
+
+export const signUp = registerUser;
+export const logIn = loginUser;
+export const logInWithGoogle = loginWithGoogle;
+export const logOut = logoutUser;
