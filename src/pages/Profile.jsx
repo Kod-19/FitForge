@@ -133,7 +133,7 @@ export default function Profile() {
         <button
           onClick={handleSaveName}
           disabled={saving}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 transition text-white text-sm font-medium disabled:opacity-50"
+          className="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 transition text-white text-sm font-medium disabled:opacity-50"
         >
           <Save size={14} />
           {saving ? "Saving..." : "Save name"}

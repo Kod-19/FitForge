@@ -106,7 +106,7 @@ export default function LogWorkout() {
             <button
               key={i}
               onClick={() => toggleExercise(i)}
-              className="w-full flex items-center gap-3 p-4 text-left hover:bg-slate-800/50 transition"
+              className="cursor-pointer w-full flex items-center gap-3 p-4 text-left hover:bg-slate-800/50 transition"
             >
               {completed[i] ? (
                 <CheckCircle2 className="text-orange-500 shrink-0" size={20} />
@@ -129,7 +129,7 @@ export default function LogWorkout() {
       <button
         onClick={handleFinishWorkout}
         disabled={saving}
-        className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 transition text-white font-medium disabled:opacity-50"
+        className="cursor-pointer flex items-center gap-2 px-5 py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 transition text-white font-medium disabled:opacity-50"
       >
         <Save size={16} />
         {saving ? "Saving..." : "Finish workout"}

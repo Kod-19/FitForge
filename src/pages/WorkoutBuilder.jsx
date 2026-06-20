@@ -153,7 +153,7 @@ export default function WorkoutBuilder() {
             {exercises.length > 1 && (
               <button
                 onClick={() => removeExerciseRow(i)}
-                className="text-slate-500 hover:text-red-500 transition ml-auto"
+                className="cursor-pointer text-slate-500 hover:text-red-500 transition ml-auto"
               >
                 <Trash2 size={16} />
               </button>
@@ -165,7 +165,7 @@ export default function WorkoutBuilder() {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 transition text-white font-medium disabled:opacity-50"
+        className="cursor-pointer flex items-center gap-2 px-5 py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 transition text-white font-medium disabled:opacity-50"
       >
         <Save size={16} />
         {saving ? "Saving..." : "Save plan"}

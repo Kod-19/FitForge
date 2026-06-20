@@ -70,7 +70,7 @@ export default function Navbar() {
           </NavLink>
           <button
             onClick={handleLogout}
-            className="text-slate-400 hover:text-white transition"
+            className="cursor-pointer text-slate-400 hover:text-white transition"
             title="Log out"
           >
             <LogOut size={18} />
