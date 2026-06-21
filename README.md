@@ -1,6 +1,6 @@
 # 🏋️ FitForge
 
-A workout planner web app built to explore Firebase's ecosystem hands-on — authentication, Firestore, hosting, and analytics — paired with a third-party exercise database for searchable workout instructions.
+A workout planner web app built to explore Firebase's ecosystem hands-on — authentication, Firestore, and analytics — paired with a third-party exercise database for searchable workout instructions.
 
 ## Features
 
@@ -19,7 +19,8 @@ A workout planner web app built to explore Firebase's ecosystem hands-on — aut
 | Styling | Tailwind CSS |
 | State | Zustand |
 | Routing | React Router |
-| Backend | Firebase (Auth, Firestore, Hosting, Analytics) |
+| Backend | Firebase (Auth, Firestore, Analytics) |
+| Deployment | Vercel |
 | Exercise Data | ExerciseDB API (RapidAPI) |
 | Charts | Recharts |
 | Notifications | react-hot-toast |
@@ -29,18 +30,18 @@ A workout planner web app built to explore Firebase's ecosystem hands-on — aut
 
 - **Authentication** — Email/password + Google OAuth, protected routes
 - **Firestore** — User profiles, workout plans, and workout logs, with security rules scoping data to its owner
-- **Hosting** — Production deployment with SPA rewrite rules for client-side routing
 - **Analytics** — Page and event tracking
 
-> Firebase Cloud Storage and Cloud Functions were deliberately skipped since both require the Blaze (pay-as-you-go) plan. Exercise media is sourced externally via the ExerciseDB API instead.
+> Firebase Cloud Storage and Cloud Functions were deliberately skipped since both require the Blaze (pay-as-you-go) plan. Exercise media is sourced externally via the ExerciseDB API instead. Hosting was done via Vercel instead of Firebase Hosting.
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 18+
-- A Firebase project (Auth, Firestore, and Hosting enabled)
+- A Firebase project (Auth and Firestore enabled)
 - A free RapidAPI account subscribed to ExerciseDB
+- A Vercel account for deployment
 
 ### Installation
 
@@ -71,18 +72,15 @@ VITE_RAPIDAPI_KEY=
 npm run dev
 ```
 
-### Run with Firebase Emulators
-
-```bash
-firebase emulators:start
-```
-
 ## Deployment
 
+This project is deployed on **Vercel**.
+
 ```bash
-npm run build
-firebase deploy --only hosting
+vercel --prod
 ```
+
+Or connect the GitHub repo directly in the Vercel dashboard for automatic deploys on push.
 
 To deploy Firestore security rules after changes:
 
