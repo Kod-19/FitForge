@@ -1,42 +1,55 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { Search, Play, X, Info } from "lucide-react";
-import { db } from "../firebase/firebase";
-
-const MUSCLE_GROUPS = ["All", "Chest", "Back", "Legs", "Shoulders", "Arms", "Core"];
+import { Search, Play, X } from "lucide-react";
+import { getBodyPartList, getExercisesByBodyPart, searchExercisesByName, getExerciseImageUrl } from "../utils/exerciseDb";
+import LazyExerciseGif from "../components/LazyExerciseGif";
 
 export default function ExerciseLibrary() {
+  const [bodyParts, setBodyParts] = useState([]);
+  const [activeBodyPart, setActiveBodyPart] = useState("back");
   const [exercises, setExercises] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [activeGroup, setActiveGroup] = useState("All");
-  const [activeVideo, setActiveVideo] = useState(null); // exercise currently shown in modal
+  const [loading, setLoading] = useState(true);
+  const [activeExercise, setActiveExercise] = useState(null);
 
+  // Load the list of body part categories once, on mount
   useEffect(() => {
-    async function fetchExercises() {
-      const snap = await getDocs(collection(db, "exercises"));
-      setExercises(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-      setLoading(false);
-    }
-    fetchExercises();
+    getBodyPartList()
+      .then(setBodyParts)
+      .catch(() => setBodyParts(["back", "chest", "legs", "shoulders", "arms", "core"]));
   }, []);
 
-  const filtered = exercises.filter((ex) => {
-    const matchesGroup = activeGroup === "All" || ex.muscleGroup === activeGroup;
-    const matchesSearch = ex.name?.toLowerCase().includes(search.toLowerCase());
-    return matchesGroup && matchesSearch;
-  });
+  // Refetch exercises whenever the selected body part changes
+  useEffect(() => {
+    setLoading(true);
+    getExercisesByBodyPart(activeBodyPart)
+      .then((data) => {
+        console.log("ExerciseDB response:", data); // temporary -- inspect gifUrl values
+        setExercises(data);
+      })
+      .catch(() => setExercises([]))
+      .finally(() => setLoading(false));
+  }, [activeBodyPart]);
+
+  // Debounced search: waits 400ms after typing stops before hitting the API
+  useEffect(() => {
+    if (!search.trim()) return;
+
+    const timeout = setTimeout(() => {
+      setLoading(true);
+      searchExercisesByName(search)
+        .then(setExercises)
+        .catch(() => setExercises([]))
+        .finally(() => setLoading(false));
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [search]);
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-white">Exercise Library</h1>
-        <p className="text-slate-400 text-sm mt-1">Browse movements with video demos.</p>
-      </div>
-
-      <div className="flex items-start gap-3 rounded-lg border border-orange-500/20 bg-orange-500/10 px-4 py-3 text-sm text-orange-100">
-        <Info className="mt-0.5 shrink-0 text-orange-400" size={16} />
-        <p>Exercise illustrations are coming soon.</p>
+        <p className="text-slate-400 text-sm mt-1">Search exercises by name or target body part.</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3">
@@ -46,23 +59,26 @@ export default function ExerciseLibrary() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search exercises..."
+            placeholder="Search exercises (e.g. squat, curl)..."
             className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-slate-900 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-orange-500"
           />
         </div>
 
         <div className="flex gap-2 overflow-x-auto">
-          {MUSCLE_GROUPS.map((group) => (
+          {bodyParts.map((part) => (
             <button
-              key={group}
-              onClick={() => setActiveGroup(group)}
-              className={`px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition ${
-                activeGroup === group
+              key={part}
+              onClick={() => {
+                setSearch("");
+                setActiveBodyPart(part);
+              }}
+              className={`px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap capitalize transition ${
+                activeBodyPart === part && !search
                   ? "bg-orange-500 text-white"
                   : "bg-slate-900 text-slate-400 hover:text-white"
               }`}
             >
-              {group}
+              {part}
             </button>
           ))}
         </div>
@@ -70,59 +86,83 @@ export default function ExerciseLibrary() {
 
       {loading ? (
         <p className="text-slate-500 text-sm">Loading exercises...</p>
-      ) : filtered.length === 0 ? (
-        <p className="text-slate-500 text-sm">No exercises match your filters.</p>
+      ) : exercises.length === 0 ? (
+        <p className="text-slate-500 text-sm">No exercises found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((ex) => (
+          {exercises.map((ex) => (
             <button
               key={ex.id}
-              onClick={() => setActiveVideo(ex)}
+              onClick={() => setActiveExercise(ex)}
               className="text-left bg-slate-900 rounded-xl overflow-hidden hover:bg-slate-800 transition group"
             >
-              <div className="aspect-video bg-slate-800 flex items-center justify-center relative">
-                {ex.thumbnailURL ? (
-                  <img src={ex.thumbnailURL} alt={ex.name} className="w-full h-full object-cover" />
-                ) : (
-                  <Play className="text-slate-600" size={28} />
-                )}
+              <div className="aspect-video bg-slate-800 relative overflow-hidden">
+                <LazyExerciseGif
+                  src={getExerciseImageUrl(ex.id, 180)}
+                  alt={ex.name}
+                  className="w-full h-full"
+                />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition flex items-center justify-center">
                   <Play className="text-white opacity-0 group-hover:opacity-100 transition" size={28} fill="white" />
                 </div>
               </div>
               <div className="p-3">
-                <p className="text-white font-medium text-sm">{ex.name}</p>
-                <p className="text-slate-500 text-xs mt-0.5">{ex.muscleGroup}</p>
+                <p className="text-white font-medium text-sm capitalize">{ex.name}</p>
+                <p className="text-slate-500 text-xs mt-0.5 capitalize">
+                  {ex.target} · {ex.equipment}
+                </p>
               </div>
             </button>
           ))}
         </div>
       )}
 
-      {activeVideo && (
+      {activeExercise && (
         <div
           className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
-          onClick={() => setActiveVideo(null)}
+          onClick={() => setActiveExercise(null)}
         >
           <div
-            className="bg-slate-900 rounded-xl max-w-lg w-full overflow-hidden"
+            className="bg-slate-900 rounded-xl max-w-lg w-full overflow-hidden max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-4 border-b border-slate-800">
-              <h3 className="text-white font-medium">{activeVideo.name}</h3>
-              <button onClick={() => setActiveVideo(null)} className="text-slate-400 hover:text-white">
+            <div className="flex items-center justify-between p-4 border-b border-slate-800 sticky top-0 bg-slate-900">
+              <h3 className="text-white font-medium capitalize">{activeExercise.name}</h3>
+              <button onClick={() => setActiveExercise(null)} className="text-slate-400 hover:text-white">
                 <X size={20} />
               </button>
             </div>
-            <video
-              src={activeVideo.videoURL}
-              controls
-              autoPlay
-              className="w-full aspect-video bg-black"
+
+            <img
+              src={getExerciseImageUrl(activeExercise.id, 360)}
+              alt={activeExercise.name}
+              className="w-full bg-black"
             />
-            {activeVideo.description && (
-              <p className="text-slate-400 text-sm p-4">{activeVideo.description}</p>
-            )}
+
+            <div className="p-4 space-y-3">
+              <div className="flex gap-2 flex-wrap">
+                <span className="px-2 py-1 rounded bg-slate-800 text-slate-300 text-xs capitalize">
+                  Target: {activeExercise.target}
+                </span>
+                <span className="px-2 py-1 rounded bg-slate-800 text-slate-300 text-xs capitalize">
+                  Equipment: {activeExercise.equipment}
+                </span>
+                <span className="px-2 py-1 rounded bg-slate-800 text-slate-300 text-xs capitalize">
+                  Body part: {activeExercise.bodyPart}
+                </span>
+              </div>
+
+              {activeExercise.instructions?.length > 0 && (
+                <div>
+                  <p className="text-slate-400 text-xs mb-1">Instructions</p>
+                  <ol className="text-slate-300 text-sm space-y-1 list-decimal list-inside">
+                    {activeExercise.instructions.map((step, i) => (
+                      <li key={i}>{step}</li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

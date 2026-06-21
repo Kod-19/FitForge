@@ -5,7 +5,6 @@ import { Camera, Save } from "lucide-react";
 import toast from "react-hot-toast";
 import { db, auth } from "../firebase/firebase";
 import { useAuth } from "../hooks/useAuth";
-import { uploadToCloudinary } from "../utils/cloudinary";
 
 export default function Profile() {
   const { user } = useAuth();
