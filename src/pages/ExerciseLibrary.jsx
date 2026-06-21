@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Search, Play, X } from "lucide-react";
-import { getBodyPartList, getExercisesByBodyPart, searchExercisesByName, getExerciseImageUrl } from "../utils/exerciseDb";
+import { getBodyPartList, getExercisesByBodyPart, searchExercisesByName, getExerciseImageUrl } from "../utils/exerciseDB";
 import LazyExerciseGif from "../components/LazyExerciseGif";
 
 export default function ExerciseLibrary() {
