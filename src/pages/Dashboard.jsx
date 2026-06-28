@@ -71,7 +71,7 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      <div className="bg-gradient-to-r from-orange-500/10 to-slate-900 border border-orange-500/20 rounded-xl p-5">
+      <div className="bg-linear-to-r from-orange-500/10 to-slate-900 border border-orange-500/20 rounded-xl p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-white font-medium text-sm">Need a quick walkthrough?</h2>
