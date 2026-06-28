@@ -71,6 +71,26 @@ export default function Dashboard() {
         </Link>
       </div>
 
+      <div className="bg-gradient-to-r from-orange-500/10 to-slate-900 border border-orange-500/20 rounded-xl p-5">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-white font-medium text-sm">Need a quick walkthrough?</h2>
+            <p className="text-slate-400 text-sm mt-1">
+              See how to create and track workouts in FitForge.
+            </p>
+          </div>
+          <a
+            href="https://scribehow.com/embed-preview/How_to_Create_and_Track_Workouts_in_Fit_Forge__bsk96466T66AzlX591itXQ?as=video&size=flexible&voice=shimmer&scaleMode=contain"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-orange-600"
+          >
+            Watch video
+            <ArrowRight size={16} />
+          </a>
+        </div>
+      </div>
+
       <div className="bg-slate-900 rounded-xl p-5">
         <h2 className="text-white font-medium text-sm mb-3">Today's plan</h2>
         <p className="text-slate-500 text-sm">
