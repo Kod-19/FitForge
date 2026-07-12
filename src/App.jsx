@@ -10,6 +10,7 @@ import ExerciseLibrary from "./pages/ExerciseLibrary";
 import LogWorkout from "./pages/LogWorkout";
 import Progress from "./pages/Progress";
 import Profile from "./pages/Profile";
+import Help from "./pages/Help";
 
 // Wraps any protected page with both the auth check AND the navbar,
 // so we don't have to repeat <Navbar /> on every single route below
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/log" element={<Layout><LogWorkout /></Layout>} />
         <Route path="/progress" element={<Layout><Progress /></Layout>} />
         <Route path="/profile" element={<Layout><Profile /></Layout>} />
+        <Route path="/help" element={<Layout><Help /></Layout>} />
       </Routes>
     </BrowserRouter>
   );

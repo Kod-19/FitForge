@@ -1,12 +1,28 @@
 import {
   createUserWithEmailAndPassword,
+  getRedirectResult,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
   signOut,
   updateProfile,
 } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, googleProvider, db } from "./firebase";
+
+googleProvider.setCustomParameters({ prompt: "select_account" });
+
+async function ensureGoogleUserProfile(user) {
+  const userRef = doc(db, "users", user.uid);
+  await setDoc(userRef, {
+    uid: user.uid,
+    name: user.displayName,
+    email: user.email,
+    photoURL: user.photoURL,
+    streak: 0,
+    joinedAt: serverTimestamp(),
+  }, { merge: true });
+}
 
 //Register with email and password
 export const registerUser = async (email, password, displayName) => {
@@ -37,21 +53,30 @@ export const loginUser = async (email, password) => {
 
 //sign in with Google
 export const loginWithGoogle = async () => {
-    const userCredential = await signInWithPopup(auth, googleProvider);
-    const user = userCredential.user;
+    try {
+        const userCredential = await signInWithPopup(auth, googleProvider);
+        await ensureGoogleUserProfile(userCredential.user);
+        return userCredential.user;
+    } catch (error) {
+        if (
+            error?.code === "auth/popup-blocked" ||
+            error?.code === "auth/popup-closed-by-user" ||
+            error?.code === "auth/operation-not-supported-in-this-environment"
+        ) {
+            await signInWithRedirect(auth, googleProvider);
+            return null;
+        }
 
-    //create Firestore doc only of it's their first time
-    const useRef = doc(db, "users", user.uid);
-    await setDoc(useRef, {
-        uid: user.uid,
-        name: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        streak: 0,
-        joinedAt: serverTimestamp()
-    }, { merge: true }); //merge: true won't overwrite existing data
+        throw error;
+    }
+}
 
-    return user;
+export const handleGoogleRedirectResult = async () => {
+    const result = await getRedirectResult(auth);
+    if (!result?.user) return null;
+
+    await ensureGoogleUserProfile(result.user);
+    return result.user;
 }
 
 //log out

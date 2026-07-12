@@ -1,20 +1,18 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
-import { Camera, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import toast from "react-hot-toast";
 import { db, auth } from "../firebase/firebase";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Profile() {
   const { user } = useAuth();
-  const fileInputRef = useRef(null);
 
   const [profile, setProfile] = useState(null);
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -30,35 +28,6 @@ export default function Profile() {
 
     fetchProfile();
   }, [user]);
-
-  async function handlePhotoSelect(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-      return toast.error("Please select an image file");
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      return toast.error("Image must be under 5MB");
-    }
-
-    setUploadingPhoto(true);
-    try {
-      // Upload to Cloudinary instead of Firebase Storage (avoids requiring the Blaze plan)
-      const photoURL = await uploadToCloudinary(file);
-
-      // Update both Firebase Auth profile and Firestore doc so they stay in sync
-      await updateProfile(auth.currentUser, { photoURL });
-      await updateDoc(doc(db, "users", user.uid), { photoURL });
-
-      setProfile((prev) => ({ ...prev, photoURL }));
-      toast.success("Profile photo updated");
-    } catch {
-      toast.error("Couldn't upload photo. Try again.");
-    } finally {
-      setUploadingPhoto(false);
-    }
-  }
 
   async function handleSaveName() {
     if (!name.trim()) return toast.error("Name can't be empty");
@@ -85,38 +54,9 @@ export default function Profile() {
       </div>
 
       <div className="bg-slate-900 rounded-xl p-6 flex flex-col items-center">
-        <div className="relative">
-          {profile?.photoURL ? (
-            <img
-              src={profile.photoURL}
-              alt={profile.name}
-              className="w-24 h-24 rounded-full object-cover"
-            />
-          ) : (
-            <div className="w-24 h-24 rounded-full bg-orange-500/20 text-orange-500 flex items-center justify-center text-3xl font-semibold">
-              {profile?.name?.[0]?.toUpperCase() || "U"}
-            </div>
-          )}
-
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploadingPhoto}
-            className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-orange-500 hover:bg-orange-600 transition flex items-center justify-center disabled:opacity-50"
-            title="Change photo"
-          >
-            <Camera size={14} className="text-white" />
-          </button>
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handlePhotoSelect}
-            className="hidden"
-          />
+        <div className="w-24 h-24 rounded-full bg-orange-500/20 text-orange-500 flex items-center justify-center text-3xl font-semibold">
+          {profile?.name?.[0]?.toUpperCase() || "U"}
         </div>
-
-        {uploadingPhoto && <p className="text-slate-500 text-xs mt-3">Uploading...</p>}
 
         <p className="text-slate-500 text-xs mt-4">{profile?.email}</p>
       </div>

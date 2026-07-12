@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { Dumbbell, LayoutDashboard, ListPlus, Library, ClipboardList, TrendingUp, LogOut } from "lucide-react";
+import { Dumbbell, LayoutDashboard, ListPlus, Library, ClipboardList, TrendingUp, LifeBuoy, LogOut } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../hooks/useAuth";
 import { logoutUser } from "../firebase/auth";
@@ -10,6 +10,7 @@ const links = [
   { to: "/library", label: "Library", icon: Library },
   { to: "/log", label: "Log", icon: ClipboardList },
   { to: "/progress", label: "Progress", icon: TrendingUp },
+  { to: "/help", label: "Help", icon: LifeBuoy },
 ];
 
 export default function Navbar() {
