@@ -18,11 +18,14 @@ export default function Login() {
     setSubmitting(true);
 
     try {
+      const trimmedEmail = email.trim().toLowerCase();
       if (isSignUp) {
-        await registerUser(email, password, name);
+        await registerUser(trimmedEmail, password, name.trim());
+        await savePasswordCredential(trimmedEmail, password, name.trim() || trimmedEmail);
         toast.success("Account created!");
       } else {
-        await loginUser(email, password);
+        await loginUser(trimmedEmail, password);
+        await savePasswordCredential(trimmedEmail, password, trimmedEmail);
         toast.success("Welcome back!");
       }
       navigate("/");
@@ -30,6 +33,24 @@ export default function Login() {
       toast.error(friendlyError(err.code));
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function savePasswordCredential(id, passwordValue, displayName) {
+    if (typeof window === "undefined") return;
+
+    const supportsPasswordCredential = "PasswordCredential" in window && navigator.credentials?.store;
+    if (!supportsPasswordCredential) return;
+
+    try {
+      const credential = new window.PasswordCredential({
+        id,
+        password: passwordValue,
+        name: displayName,
+      });
+      await navigator.credentials.store(credential);
+    } catch {
+      // Ignore credential storage failures and fall back to browser autocomplete behavior.
     }
   }
 
@@ -49,6 +70,7 @@ export default function Login() {
           {isSignUp && (
             <input
               type="text"
+              id="full-name"
               placeholder="Full name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -61,11 +83,13 @@ export default function Login() {
 
           <input
             type="email"
+            id="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            autoComplete="email"
-            name="email"
+            autoComplete="username"
+            name="username"
+            inputMode="email"
             required
             className="w-full px-4 py-2.5 rounded-lg bg-slate-800 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-orange-500"
           />
@@ -73,6 +97,7 @@ export default function Login() {
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
+              id="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
