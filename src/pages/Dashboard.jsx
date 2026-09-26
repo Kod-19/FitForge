@@ -11,12 +11,20 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !db) {
+      setLoading(false);
+      return;
+    }
 
     async function fetchProfile() {
-      const snap = await getDoc(doc(db, "users", user.uid));
-      if (snap.exists()) setProfile(snap.data());
-      setLoading(false);
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) setProfile(snap.data());
+      } catch (error) {
+        console.error("Dashboard profile fetch failed:", error);
+      } finally {
+        setLoading(false);
+      }
     }
 
     fetchProfile();
@@ -26,9 +34,13 @@ export default function Dashboard() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-white">
-          {loading ? "Welcome" : `Welcome back, ${profile?.name?.split(" ")[0] || "Athlete"}`}
+          {loading
+            ? "Welcome"
+            : `Welcome back, ${profile?.name?.split(" ")[0] || "Athlete"}`}
         </h1>
-        <p className="text-slate-400 text-sm mt-1">Let's keep the streak going.</p>
+        <p className="text-slate-400 text-sm mt-1">
+          Let's keep the streak going.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -37,7 +49,9 @@ export default function Dashboard() {
             <Flame className="text-orange-500" size={20} />
           </div>
           <div>
-            <p className="text-2xl font-bold text-white">{loading ? "—" : profile?.streak ?? 0}</p>
+            <p className="text-2xl font-bold text-white">
+              {loading ? "—" : (profile?.streak ?? 0)}
+            </p>
             <p className="text-slate-400 text-xs">Day streak</p>
           </div>
         </div>
@@ -53,7 +67,10 @@ export default function Dashboard() {
             <p className="text-white font-medium text-sm">Build a workout</p>
             <p className="text-slate-400 text-xs">Create a new plan</p>
           </div>
-          <ArrowRight className="text-slate-600 group-hover:text-orange-500 transition" size={16} />
+          <ArrowRight
+            className="text-slate-600 group-hover:text-orange-500 transition"
+            size={16}
+          />
         </Link>
 
         <Link
@@ -67,7 +84,10 @@ export default function Dashboard() {
             <p className="text-white font-medium text-sm">Exercise library</p>
             <p className="text-slate-400 text-xs">Browse with video demos</p>
           </div>
-          <ArrowRight className="text-slate-600 group-hover:text-orange-500 transition" size={16} />
+          <ArrowRight
+            className="text-slate-600 group-hover:text-orange-500 transition"
+            size={16}
+          />
         </Link>
 
         <Link
@@ -78,10 +98,15 @@ export default function Dashboard() {
             <LifeBuoy className="text-orange-500" size={20} />
           </div>
           <div className="flex-1">
-            <p className="text-white font-medium text-sm">How to use FitForge</p>
+            <p className="text-white font-medium text-sm">
+              How to use FitForge
+            </p>
             <p className="text-slate-400 text-xs">Quick guide for new users</p>
           </div>
-          <ArrowRight className="text-slate-600 group-hover:text-orange-500 transition" size={16} />
+          <ArrowRight
+            className="text-slate-600 group-hover:text-orange-500 transition"
+            size={16}
+          />
         </Link>
       </div>
 

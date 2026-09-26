@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs, addDoc, doc, updateDoc, increment, serverTimestamp } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  updateDoc,
+  increment,
+  serverTimestamp,
+} from "firebase/firestore";
 import { CheckCircle2, Circle, Save } from "lucide-react";
 import toast from "react-hot-toast";
 import { db } from "../firebase/firebase";
@@ -14,14 +22,23 @@ export default function LogWorkout() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !db) {
+      setLoading(false);
+      return;
+    }
 
     async function fetchPlans() {
-      const snap = await getDocs(collection(db, "users", user.uid, "plans"));
-      const fetched = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-      setPlans(fetched);
-      if (fetched.length > 0) setSelectedPlanId(fetched[0].id);
-      setLoading(false);
+      try {
+        const snap = await getDocs(collection(db, "users", user.uid, "plans"));
+        const fetched = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        setPlans(fetched);
+        if (fetched.length > 0) setSelectedPlanId(fetched[0].id);
+      } catch (error) {
+        console.error("Plans fetch failed:", error);
+        setPlans([]);
+      } finally {
+        setLoading(false);
+      }
     }
 
     fetchPlans();
@@ -36,7 +53,9 @@ export default function LogWorkout() {
   async function handleFinishWorkout() {
     if (!selectedPlan) return;
 
-    const completedExercises = selectedPlan.exercises.filter((_, i) => completed[i]);
+    const completedExercises = selectedPlan.exercises.filter(
+      (_, i) => completed[i],
+    );
     if (completedExercises.length === 0) {
       return toast.error("Mark at least one exercise as done first");
     }
@@ -66,13 +85,15 @@ export default function LogWorkout() {
     }
   }
 
-  if (loading) return <p className="text-slate-500 text-sm">Loading your plans...</p>;
+  if (loading)
+    return <p className="text-slate-500 text-sm">Loading your plans...</p>;
 
   if (plans.length === 0) {
     return (
       <div className="bg-slate-900 rounded-xl p-6 text-center">
         <p className="text-slate-400 text-sm">
-          You don't have any saved plans yet. Build one first in the Workout Builder.
+          You don't have any saved plans yet. Build one first in the Workout
+          Builder.
         </p>
       </div>
     );
@@ -82,7 +103,9 @@ export default function LogWorkout() {
     <div className="space-y-6 max-w-2xl">
       <div>
         <h1 className="text-2xl font-bold text-white">Log Workout</h1>
-        <p className="text-slate-400 text-sm mt-1">Check off exercises as you complete them.</p>
+        <p className="text-slate-400 text-sm mt-1">
+          Check off exercises as you complete them.
+        </p>
       </div>
 
       <select
@@ -114,7 +137,9 @@ export default function LogWorkout() {
                 <Circle className="text-slate-600 shrink-0" size={20} />
               )}
               <div className="flex-1">
-                <p className={`text-sm font-medium ${completed[i] ? "text-white" : "text-slate-300"}`}>
+                <p
+                  className={`text-sm font-medium ${completed[i] ? "text-white" : "text-slate-300"}`}
+                >
                   {ex.name}
                 </p>
                 <p className="text-slate-500 text-xs">

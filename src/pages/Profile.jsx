@@ -15,15 +15,23 @@ export default function Profile() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !db) {
+      setLoading(false);
+      return;
+    }
 
     async function fetchProfile() {
-      const snap = await getDoc(doc(db, "users", user.uid));
-      if (snap.exists()) {
-        setProfile(snap.data());
-        setName(snap.data().name || "");
+      try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) {
+          setProfile(snap.data());
+          setName(snap.data().name || "");
+        }
+      } catch (error) {
+        console.error("Profile fetch failed:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     fetchProfile();
@@ -44,13 +52,16 @@ export default function Profile() {
     }
   }
 
-  if (loading) return <p className="text-slate-500 text-sm">Loading profile...</p>;
+  if (loading)
+    return <p className="text-slate-500 text-sm">Loading profile...</p>;
 
   return (
     <div className="max-w-md space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-white">Profile</h1>
-        <p className="text-slate-400 text-sm mt-1">Manage your account details.</p>
+        <p className="text-slate-400 text-sm mt-1">
+          Manage your account details.
+        </p>
       </div>
 
       <div className="bg-slate-900 rounded-xl p-6 flex flex-col items-center">
@@ -81,7 +92,9 @@ export default function Profile() {
 
       <div className="bg-slate-900 rounded-xl p-5">
         <p className="text-slate-400 text-xs">Current streak</p>
-        <p className="text-2xl font-bold text-white mt-1">{profile?.streak ?? 0} days</p>
+        <p className="text-2xl font-bold text-white mt-1">
+          {profile?.streak ?? 0} days
+        </p>
       </div>
     </div>
   );

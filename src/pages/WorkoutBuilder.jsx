@@ -18,18 +18,21 @@ export default function WorkoutBuilder() {
 
   function toggleDay(day) {
     setSelectedDays((prev) =>
-      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day],
     );
   }
 
   function updateExercise(index, field, value) {
     setExercises((prev) =>
-      prev.map((ex, i) => (i === index ? { ...ex, [field]: value } : ex))
+      prev.map((ex, i) => (i === index ? { ...ex, [field]: value } : ex)),
     );
   }
 
   function addExerciseRow() {
-    setExercises((prev) => [...prev, { name: "", sets: 3, reps: 10, restSeconds: 60 }]);
+    setExercises((prev) => [
+      ...prev,
+      { name: "", sets: 3, reps: 10, restSeconds: 60 },
+    ]);
   }
 
   function removeExerciseRow(index) {
@@ -37,6 +40,11 @@ export default function WorkoutBuilder() {
   }
 
   async function handleSave() {
+    if (!user || !db) {
+      toast.error("Firebase is not configured yet.");
+      return;
+    }
+
     if (!planName.trim()) return toast.error("Give your plan a name");
     if (selectedDays.length === 0) return toast.error("Pick at least one day");
     if (exercises.some((ex) => !ex.name.trim()))
@@ -54,8 +62,11 @@ export default function WorkoutBuilder() {
       setPlanName("");
       setSelectedDays([]);
       setExercises([{ name: "", sets: 3, reps: 10, restSeconds: 60 }]);
-    } catch {
-      toast.error("Couldn't save plan. Try again.");
+    } catch (error) {
+      console.error("Plan save failed:", error);
+      toast.error(
+        "Couldn't save plan. Check your Firestore rules or sign-in status.",
+      );
     } finally {
       setSaving(false);
     }
@@ -65,7 +76,9 @@ export default function WorkoutBuilder() {
     <div className="space-y-6 max-w-2xl">
       <div>
         <h1 className="text-2xl font-bold text-white">Workout Builder</h1>
-        <p className="text-slate-400 text-sm mt-1">Design a plan and save it to your profile.</p>
+        <p className="text-slate-400 text-sm mt-1">
+          Design a plan and save it to your profile.
+        </p>
       </div>
 
       <div className="bg-slate-900 rounded-xl p-5 space-y-4">
@@ -113,7 +126,10 @@ export default function WorkoutBuilder() {
         </div>
 
         {exercises.map((ex, i) => (
-          <div key={i} className="flex flex-wrap gap-2 items-center bg-slate-800/50 p-3 rounded-lg">
+          <div
+            key={i}
+            className="flex flex-wrap gap-2 items-center bg-slate-800/50 p-3 rounded-lg"
+          >
             <input
               type="text"
               value={ex.name}
@@ -124,7 +140,9 @@ export default function WorkoutBuilder() {
             <input
               type="number"
               value={ex.sets}
-              onChange={(e) => updateExercise(i, "sets", Number(e.target.value))}
+              onChange={(e) =>
+                updateExercise(i, "sets", Number(e.target.value))
+              }
               min={1}
               className="w-16 px-2 py-2 rounded-lg bg-slate-800 text-white text-sm text-center outline-none focus:ring-2 focus:ring-orange-500"
               title="Sets"
@@ -133,7 +151,9 @@ export default function WorkoutBuilder() {
             <input
               type="number"
               value={ex.reps}
-              onChange={(e) => updateExercise(i, "reps", Number(e.target.value))}
+              onChange={(e) =>
+                updateExercise(i, "reps", Number(e.target.value))
+              }
               min={1}
               className="w-16 px-2 py-2 rounded-lg bg-slate-800 text-white text-sm text-center outline-none focus:ring-2 focus:ring-orange-500"
               title="Reps"
@@ -142,7 +162,9 @@ export default function WorkoutBuilder() {
             <input
               type="number"
               value={ex.restSeconds}
-              onChange={(e) => updateExercise(i, "restSeconds", Number(e.target.value))}
+              onChange={(e) =>
+                updateExercise(i, "restSeconds", Number(e.target.value))
+              }
               min={0}
               step={15}
               className="w-16 px-2 py-2 rounded-lg bg-slate-800 text-white text-sm text-center outline-none focus:ring-2 focus:ring-orange-500"
