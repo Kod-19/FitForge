@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { Search, Play, X } from "lucide-react";
-import { getBodyPartList, getExercisesByBodyPart, searchExercisesByName, getExerciseImageUrl } from "../utils/exerciseDB";
+import {
+  getBodyPartList,
+  getExercisesByBodyPart,
+  searchExercisesByName,
+  getExerciseImageUrl,
+} from "../utils/exerciseDB";
 import LazyExerciseGif from "../components/LazyExerciseGif";
 
 export default function ExerciseLibrary() {
@@ -15,7 +20,9 @@ export default function ExerciseLibrary() {
   useEffect(() => {
     getBodyPartList()
       .then(setBodyParts)
-      .catch(() => setBodyParts(["back", "chest", "legs", "shoulders", "arms", "core"]));
+      .catch(() =>
+        setBodyParts(["back", "chest", "legs", "shoulders", "arms", "core"]),
+      );
   }, []);
 
   // Refetch exercises whenever the selected body part changes
@@ -49,22 +56,28 @@ export default function ExerciseLibrary() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-white">Exercise Library</h1>
-        <p className="text-slate-400 text-sm mt-1">Search exercises by name or target body part.</p>
+        <p className="text-slate-400 text-sm mt-1">
+          Search exercises by name or target body part.
+        </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
+      <div className="flex flex-col gap-3">
+        <div className="relative w-full">
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
+            size={16}
+          />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search exercises (e.g. squat, curl)..."
             className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-slate-900 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-orange-500"
+            aria-label="Search exercises"
           />
         </div>
 
-        <div className="flex gap-2 overflow-x-auto">
+        <div className="flex gap-2 overflow-x-auto pb-1">
           {bodyParts.map((part) => (
             <button
               key={part}
@@ -103,11 +116,17 @@ export default function ExerciseLibrary() {
                   className="w-full h-full"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition flex items-center justify-center">
-                  <Play className="text-white opacity-0 group-hover:opacity-100 transition" size={28} fill="white" />
+                  <Play
+                    className="text-white opacity-0 group-hover:opacity-100 transition"
+                    size={28}
+                    fill="white"
+                  />
                 </div>
               </div>
               <div className="p-3">
-                <p className="text-white font-medium text-sm capitalize">{ex.name}</p>
+                <p className="text-white font-medium text-sm capitalize">
+                  {ex.name}
+                </p>
                 <p className="text-slate-500 text-xs mt-0.5 capitalize">
                   {ex.target} · {ex.equipment}
                 </p>
@@ -127,8 +146,13 @@ export default function ExerciseLibrary() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between p-4 border-b border-slate-800 sticky top-0 bg-slate-900">
-              <h3 className="text-white font-medium capitalize">{activeExercise.name}</h3>
-              <button onClick={() => setActiveExercise(null)} className="text-slate-400 hover:text-white">
+              <h3 className="text-white font-medium capitalize">
+                {activeExercise.name}
+              </h3>
+              <button
+                onClick={() => setActiveExercise(null)}
+                className="text-slate-400 hover:text-white"
+              >
                 <X size={20} />
               </button>
             </div>
