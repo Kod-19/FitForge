@@ -1,61 +1,69 @@
-# 🏋️ FitForge
+# FitForge
 
-A workout planner web app built to explore Firebase's ecosystem hands-on — authentication, Firestore, and analytics — paired with a third-party exercise database for searchable workout instructions.
+FitForge is a workout planner and tracking app built with React, Vite, and Firebase. It helps users plan training sessions, browse exercises, log workouts, and stay consistent over time.
 
-## Features
+## What the app does
 
-- **Authentication** — Email/password and Google sign-in via Firebase Auth
-- **Workout Builder** — Create custom workout plans with exercises, sets, reps, and rest timers
-- **Exercise Library** — Search 1000+ exercises by name or body part, powered by the ExerciseDB API, with full instructions and animated form demos
-- **Workout Logging** — Check off exercises as you complete them, with automatic streak tracking
-- **Progress Tracking** — Weekly training volume charts and workout history
-- **Profile Management** — Editable display name and profile photo
+- Sign in with Firebase authentication
+- Create custom workout plans with exercise details, sets, reps, and rest time
+- Browse an exercise library with search and demo media
+- Log completed workouts and save progress
+- Track streaks and workout history
+- Update profile information
+- Follow a simple onboarding/help flow for new users
 
-## Tech Stack
+## Tech stack
 
-| Layer | Tool |
-|---|---|
-| Frontend | React + Vite |
-| Styling | Tailwind CSS |
-| State | Zustand |
-| Routing | React Router |
-| Backend | Firebase (Auth, Firestore, Analytics) |
-| Deployment | Vercel |
-| Exercise Data | ExerciseDB API (RapidAPI) |
-| Charts | Recharts |
-| Notifications | react-hot-toast |
-| Icons | Lucide React |
+- Frontend: React + Vite
+- Styling: Tailwind CSS
+- Routing: React Router
+- Backend/auth: Firebase Auth + Firestore
+- Data: ExerciseDB API via RapidAPI
+- Charts: Recharts
+- Notifications: react-hot-toast
 
-## Firebase Features Used
+## Project structure
 
-- **Authentication** — Email/password + Google OAuth, protected routes
-- **Firestore** — User profiles, workout plans, and workout logs, with security rules scoping data to its owner
-- **Analytics** — Page and event tracking
+```bash
+src/
+  components/
+  firebase/
+  hooks/
+  pages/
+  utils/
+public/
+functions/
+```
 
-> Firebase Cloud Storage and Cloud Functions were deliberately skipped since both require the Blaze (pay-as-you-go) plan. Exercise media is sourced externally via the ExerciseDB API instead. Hosting was done via Vercel instead of Firebase Hosting.
+Main screens include:
 
-## Getting Started
+- Dashboard
+- Workout Builder
+- Exercise Library
+- Log Workout
+- Progress
+- Profile
+- Help
+
+## Getting started
 
 ### Prerequisites
 
 - Node.js 18+
-- A Firebase project (Auth and Firestore enabled)
-- A free RapidAPI account subscribed to ExerciseDB
-- A Vercel account for deployment
+- A Firebase project with Authentication and Firestore enabled
+- A RapidAPI key for the ExerciseDB API
 
-### Installation
+### 1. Install dependencies
 
 ```bash
-git clone <your-repo-url>
-cd fitforge
 npm install
 ```
 
-### Environment Variables
+### 2. Add environment variables
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root with your Firebase config and RapidAPI key:
 
-```
+```bash
 VITE_API_KEY=
 VITE_AUTH_DOMAIN=
 VITE_PROJECT_ID=
@@ -66,59 +74,46 @@ VITE_MEASUREMENT_ID=
 VITE_RAPIDAPI_KEY=
 ```
 
-### Run Locally
+These values come from your Firebase web app settings and your ExerciseDB API credentials.
+
+### 3. Run locally
 
 ```bash
 npm run dev
 ```
 
-## Deployment
+Then open the local Vite URL shown in the terminal.
 
-This project is deployed on **Vercel**.
+### 4. Build for production
 
 ```bash
-vercel --prod
+npm run build
 ```
 
-Or connect the GitHub repo directly in the Vercel dashboard for automatic deploys on push.
+## Firebase setup notes
 
-To deploy Firestore security rules after changes:
+This app uses Firebase for:
+
+- user authentication
+- storing workout plans and logged sessions
+- profile data and streak tracking
+
+If you are deploying update rules or related Firebase config, you can use:
 
 ```bash
 firebase deploy --only firestore:rules
 ```
 
-## Project Structure
+## Deployment
 
-```
-src/
-  components/      # Navbar, ProtectedRoute, LazyExerciseGif, etc.
-  firebase/        # Firebase config and auth helper functions
-  hooks/           # useAuth and other shared hooks
-  pages/           # Dashboard, Builder, Library, Log, Progress, Profile
-  store/           # Zustand state (active workout session)
-  utils/           # exerciseDb.js and other helpers
-```
-
-## Firestore Data Model
-
-```
-users/
-  {userId}/
-    name, email, photoURL, streak, joinedAt
-    plans/
-      {planId}/
-        name, days[], exercises[]
-    logs/
-      {logId}/
-        date, planId, completedExercises[], totalExercises
-```
+The app is intended to be deployed on Vercel, but the frontend can also be hosted anywhere that supports Vite static builds.
 
 ## Notes
 
-- Exercise data and demo GIFs are fetched live from ExerciseDB and are not stored in Firestore.
-- The ExerciseDB free tier has a limited daily request quota — heavy usage may require caching results locally.
+- Exercise library data and demo media are loaded from the external ExerciseDB API.
+- The app assumes Firebase is configured before login and Firestore actions can work properly.
+- The project is designed to stay lightweight and simple for personal or learning use.
 
 ## License
 
-Personal/educational project.
+This project is for personal or educational use.
