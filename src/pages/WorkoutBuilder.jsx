@@ -89,7 +89,7 @@ export default function WorkoutBuilder() {
             value={planName}
             onChange={(e) => setPlanName(e.target.value)}
             placeholder="e.g. Push Pull Legs"
-            className="w-full mt-1 px-4 py-2.5 rounded-lg bg-slate-800 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full mt-1 px-4 py-2.5 rounded-lg bg-slate-800 text-white text-base placeholder-slate-500 outline-none focus:ring-2 focus:ring-orange-500"
           />
         </div>
 
@@ -135,7 +135,7 @@ export default function WorkoutBuilder() {
               value={ex.name}
               onChange={(e) => updateExercise(i, "name", e.target.value)}
               placeholder="Exercise name"
-              className="flex-1 min-w-35 px-3 py-2 rounded-lg bg-slate-800 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+              className="flex-1 min-w-35 px-3 py-2 rounded-lg bg-slate-800 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-orange-500 text-base"
             />
             <input
               type="number"
@@ -144,7 +144,7 @@ export default function WorkoutBuilder() {
                 updateExercise(i, "sets", Number(e.target.value))
               }
               min={1}
-              className="w-16 px-2 py-2 rounded-lg bg-slate-800 text-white text-sm text-center outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-16 px-2 py-2 rounded-lg bg-slate-800 text-white text-base text-center outline-none focus:ring-2 focus:ring-orange-500"
               title="Sets"
             />
             <span className="text-slate-500 text-xs">sets</span>
@@ -155,7 +155,7 @@ export default function WorkoutBuilder() {
                 updateExercise(i, "reps", Number(e.target.value))
               }
               min={1}
-              className="w-16 px-2 py-2 rounded-lg bg-slate-800 text-white text-sm text-center outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-16 px-2 py-2 rounded-lg bg-slate-800 text-white text-base text-center outline-none focus:ring-2 focus:ring-orange-500"
               title="Reps"
             />
             <span className="text-slate-500 text-xs">reps</span>
@@ -167,7 +167,7 @@ export default function WorkoutBuilder() {
               }
               min={0}
               step={15}
-              className="w-16 px-2 py-2 rounded-lg bg-slate-800 text-white text-sm text-center outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-16 px-2 py-2 rounded-lg bg-slate-800 text-white text-base text-center outline-none focus:ring-2 focus:ring-orange-500"
               title="Rest (seconds)"
             />
             <span className="text-slate-500 text-xs">sec rest</span>

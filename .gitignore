@@ -13,6 +13,15 @@ dist-ssr
 *.local
 .env
 
+# Firebase / local generated
+.firebase/
+.agents/
+.vite/
+functions/node_modules/
+functions/.env
+functions/.runtimeconfig.json
+coverage/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
