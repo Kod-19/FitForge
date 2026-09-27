@@ -22,6 +22,12 @@ functions/.env
 functions/.runtimeconfig.json
 coverage/
 
+# Python / local tooling
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
