@@ -1,133 +1,185 @@
-import { BookOpen, Sparkles, Dumbbell, Search, CheckCircle2, TrendingUp, UserRound } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  CheckCircle2,
+  Dumbbell,
+  Search,
+  TrendingUp,
+  UserRound,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 const guideCards = [
   {
-    title: "Start here",
-    icon: Sparkles,
-    description: "Welcome to FitForge. Think of it as your simple fitness companion that helps you plan, train, and track your progress.",
+    step: "01",
+    title: "Start on the dashboard",
+    icon: BookOpen,
+    description:
+      "After you sign in, use the dashboard as your home screen. This is where you can get a quick overview of your fitness activity.",
     bullets: [
-      "Sign in and land on your Dashboard.",
-      "Use the navigation bar to move between pages.",
-      "Your streak and recent activity will appear here.",
+      "Check your account status and recent activity.",
+      "Use the top navigation to move between pages.",
+      "Keep your routine simple and build from there.",
     ],
     linkTo: "/",
-    linkLabel: "Go to Dashboard",
+    linkLabel: "Open dashboard",
   },
   {
-    title: "Build a workout",
+    step: "02",
+    title: "Build your plan",
     icon: Dumbbell,
-    description: "Create a plan that fits your day and your goals. You can save it and reuse it whenever you want.",
+    description:
+      "Create a weekly workout plan that matches your schedule and goals.",
     bullets: [
-      "Open Builder and give your plan a name.",
-      "Pick the days you want to train.",
-      "Add exercises, sets, reps, and rest time, then save.",
+      "Name your plan and choose active days.",
+      "Add exercises with sets, reps, and rest times.",
+      "Save the plan when it looks right.",
     ],
     linkTo: "/builder",
-    linkLabel: "Open Builder",
+    linkLabel: "Go to builder",
   },
   {
+    step: "03",
     title: "Find exercises",
     icon: Search,
-    description: "Browse the Exercise Library when you want inspiration or want to learn a new movement.",
+    description:
+      "Use the exercise library to browse moves and get ideas for your training sessions.",
     bullets: [
-      "Search by exercise name like squat or curl.",
-      "Tap a body-part button to browse similar moves.",
-      "Open any exercise card to see instructions and a demo image.",
+      "Search by exercise name or body part.",
+      "Open cards for details and demonstrations.",
+      "Choose exercises that fit your plan.",
     ],
     linkTo: "/library",
-    linkLabel: "Visit Library",
+    linkLabel: "Visit library",
   },
   {
-    title: "Log your sessions",
+    step: "04",
+    title: "Log your workout",
     icon: CheckCircle2,
-    description: "After a workout, mark what you completed so your progress is saved.",
+    description:
+      "After training, record what you completed so your progress stays accurate.",
     bullets: [
-      "Open Log and choose the plan you trained with.",
-      "Tap each exercise as you finish it.",
-      "Save your session to grow your streak.",
+      "Pick the workout plan you used.",
+      "Mark each exercise as you finish it.",
+      "Save the session to keep your streak moving.",
     ],
     linkTo: "/log",
-    linkLabel: "Go to Log",
+    linkLabel: "Open log",
   },
   {
-    title: "See your progress",
+    step: "05",
+    title: "Track progress",
     icon: TrendingUp,
-    description: "The Progress page helps you see how consistently you are training over time.",
+    description:
+      "Use the progress page to review your consistency and understand your training trends.",
     bullets: [
-      "Check your weekly workout volume.",
-      "See how many exercises you have completed.",
-      "Review your recent workout history.",
+      "Keep an eye on weekly workout volume.",
+      "See how often you train across the month.",
+      "Use the data to adjust your routine.",
     ],
     linkTo: "/progress",
-    linkLabel: "Open Progress",
+    linkLabel: "View progress",
   },
   {
-    title: "Update your profile",
+    step: "06",
+    title: "Manage your profile",
     icon: UserRound,
-    description: "Keep your profile feeling personal and up to date.",
+    description:
+      "Keep your profile updated so your account info stays clear and personal.",
     bullets: [
-      "Open Profile to update your display name.",
+      "Update your display name when needed.",
       "Review your email and account details.",
-      "Your information is saved automatically.",
+      "Keep everything organized and easy to find.",
     ],
     linkTo: "/profile",
-    linkLabel: "Go to Profile",
+    linkLabel: "Go to profile",
   },
 ];
 
 export default function Help() {
   return (
-    <div className="space-y-6 max-w-5xl">
-      <div className="bg-linear-to-r from-orange-500/10 to-slate-900 border border-orange-500/20 rounded-2xl p-6">
-        <div className="flex items-start gap-3">
-          <div className="w-12 h-12 rounded-xl bg-orange-500/15 flex items-center justify-center shrink-0">
-            <BookOpen className="text-orange-500" size={22} />
+    <div className="mx-auto max-w-4xl space-y-6 pb-8">
+      <header className="rounded-2xl border border-slate-700 bg-slate-900 p-6">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-orange-500/10 text-orange-500">
+            <BookOpen size={22} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white">How to use FitForge</h1>
-            <p className="text-slate-400 mt-2 text-sm leading-6">
-              Welcome! This guide is here to make the app feel simple and easy to use. If you are new, start with the Dashboard and work your way through the features one step at a time.
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
+              Getting started
+            </p>
+            <h1 className="mt-2 text-2xl font-bold text-white">
+              How to use FitForge
+            </h1>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
+              Follow this guide in order. It is designed to keep things simple
+              and help you understand the app without feeling overwhelmed.
             </p>
           </div>
         </div>
-      </div>
+      </header>
 
       <div className="grid gap-4 md:grid-cols-2">
-        {guideCards.map(({ title, icon: Icon, description, bullets, linkTo, linkLabel }) => (
-          <div key={title} className="bg-slate-900 rounded-xl p-5 border border-slate-800">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center">
-                <Icon className="text-orange-500" size={18} />
+        {guideCards.map(
+          ({
+            step,
+            title,
+            icon: Icon,
+            description,
+            bullets,
+            linkTo,
+            linkLabel,
+          }) => (
+            <article
+              key={title}
+              className="rounded-xl border border-slate-800 bg-slate-900 p-5"
+            >
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-500/10 text-orange-500">
+                    <Icon size={18} />
+                  </div>
+                  <h2 className="text-base font-semibold text-white">
+                    {title}
+                  </h2>
+                </div>
+                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                  {step}
+                </span>
               </div>
-              <h2 className="text-white font-semibold">{title}</h2>
-            </div>
-            <p className="text-slate-400 text-sm leading-6">{description}</p>
-            <ul className="mt-3 space-y-2 text-sm text-slate-300">
-              {bullets.map((bullet) => (
-                <li key={bullet} className="flex gap-2">
-                  <span className="text-orange-500 mt-1">•</span>
-                  <span>{bullet}</span>
-                </li>
-              ))}
-            </ul>
-            <Link to={linkTo} className="inline-flex mt-4 text-sm text-orange-500 hover:underline">
-              {linkLabel} →
-            </Link>
-          </div>
-        ))}
+
+              <p className="text-sm leading-6 text-slate-400">{description}</p>
+
+              <ul className="mt-4 space-y-2 text-sm text-slate-300">
+                {bullets.map((bullet) => (
+                  <li key={bullet} className="flex gap-2">
+                    <span className="mt-1 text-orange-500">•</span>
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Link
+                to={linkTo}
+                className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-orange-500 transition hover:text-orange-400"
+              >
+                {linkLabel}
+                <ArrowRight size={14} />
+              </Link>
+            </article>
+          ),
+        )}
       </div>
 
-      <div className="bg-slate-900 rounded-xl p-5 border border-slate-800">
-        <h2 className="text-white font-semibold mb-3">A few quick tips</h2>
-        <ul className="space-y-2 text-sm text-slate-300">
-          <li>• Start small. One simple plan is better than a complicated one.</li>
-          <li>• Use the Library whenever you want fresh ideas for exercises.</li>
-          <li>• Logging your workout helps you build momentum and stay consistent.</li>
-          <li>• Your profile is there to keep your account details tidy, so update your name whenever you want.</li>
-          <li>• If you ever feel stuck, come back to this guide and follow the steps in order.</li>
+      <section className="rounded-xl border border-slate-800 bg-slate-900 p-5">
+        <h2 className="text-lg font-semibold text-white">A few quick tips</h2>
+        <ul className="mt-4 space-y-2 text-sm text-slate-300">
+          <li>• Start small and keep your plan realistic.</li>
+          <li>• Use the exercise library whenever you need ideas.</li>
+          <li>• Log workouts right after training to stay consistent.</li>
+          <li>• Come back to this page anytime you need a quick reminder.</li>
         </ul>
-      </div>
+      </section>
     </div>
   );
 }
