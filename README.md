@@ -1,6 +1,6 @@
-# FitForge
+# GetFit
 
-FitForge is a workout planner and tracking app built with React, Vite, and Firebase. It helps users plan training sessions, browse exercises, log workouts, and stay consistent over time.
+GetFit is a workout planner and tracking app built with React, Vite, and Firebase. It helps users plan training sessions, browse exercises, log workouts, and stay consistent over time.
 
 ## What the app does
 

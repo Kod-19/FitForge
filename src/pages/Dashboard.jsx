@@ -98,9 +98,7 @@ export default function Dashboard() {
             <LifeBuoy className="text-orange-500" size={20} />
           </div>
           <div className="flex-1">
-            <p className="text-white font-medium text-sm">
-              How to use FitForge
-            </p>
+            <p className="text-white font-medium text-sm">How to use GetFit</p>
             <p className="text-slate-400 text-xs">Quick guide for new users</p>
           </div>
           <ArrowRight

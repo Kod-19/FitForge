@@ -21,7 +21,11 @@ export default function Login() {
       const trimmedEmail = email.trim().toLowerCase();
       if (isSignUp) {
         await registerUser(trimmedEmail, password, name.trim());
-        await savePasswordCredential(trimmedEmail, password, name.trim() || trimmedEmail);
+        await savePasswordCredential(
+          trimmedEmail,
+          password,
+          name.trim() || trimmedEmail,
+        );
         toast.success("Account created!");
       } else {
         await loginUser(trimmedEmail, password);
@@ -39,7 +43,8 @@ export default function Login() {
   async function savePasswordCredential(id, passwordValue, displayName) {
     if (typeof window === "undefined") return;
 
-    const supportsPasswordCredential = "PasswordCredential" in window && navigator.credentials?.store;
+    const supportsPasswordCredential =
+      "PasswordCredential" in window && navigator.credentials?.store;
     if (!supportsPasswordCredential) return;
 
     try {
@@ -59,7 +64,7 @@ export default function Login() {
       <div className="w-full max-w-sm bg-slate-900 rounded-2xl p-8 shadow-xl">
         <div className="flex items-center gap-2 justify-center mb-6">
           <Dumbbell className="text-orange-500" size={28} />
-          <h1 className="text-xl font-bold text-white">FitForge</h1>
+          <h1 className="text-xl font-bold text-white">GetFit</h1>
         </div>
 
         <h2 className="text-slate-300 text-sm text-center mb-6">

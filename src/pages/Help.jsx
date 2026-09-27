@@ -109,7 +109,7 @@ export default function Help() {
               Getting started
             </p>
             <h1 className="mt-2 text-2xl font-bold text-white">
-              How to use FitForge
+              How to use GetFit
             </h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
               Follow this guide in order. It is designed to keep things simple
